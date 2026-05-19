@@ -1,0 +1,28 @@
+{
+  "os": "Linux-6.17.0-1013-gcp-x86_64-with-glibc2.39",
+  "python": "CPython 3.12.3",
+  "startedAt": "2026-05-19T03:12:24.591035Z",
+  "program": "Language_Modelling.ipynb",
+  "codePath": "Language_Modelling.ipynb",
+  "codePathLocal": "Language_Modelling.ipynb",
+  "git": {
+    "remote": "https://github.com/emcotta1701c/C147B_Transformers.git",
+    "commit": "f4eca253208029cba259abcedd68b8c5c91c482d"
+  },
+  "email": "emcotta1701c@g.ucla.edu",
+  "root": "/home/ethancotta/C147B_Transformers",
+  "host": "instance-20260418-161748.c.c147b-gan-vae.internal",
+  "executable": "/home/ethancotta/C147B_GAN_VAE/GAN/.venv/bin/python",
+  "cpu_count": 1,
+  "cpu_count_logical": 2,
+  "disk": {
+    "/": {
+      "total": "102888095744",
+      "used": "38278455296"
+    }
+  },
+  "memory": {
+    "total": "7793438720"
+  },
+  "writerId": "mven8vk9wxbhyzl7h22vopdkd5y2tppl"
+}

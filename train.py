@@ -82,10 +82,10 @@ def solver(model_name):
 
     ### ========= TODO : START ========= ###
     # Define the loss function
-    loss = None
+    loss = nn.CrossEntropyLoss()
 
     # Define the optimizer
-    optimizer = None
+    optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate)
     ### ======== TODO : END ========= ###
 
     if config.scheduler:
@@ -102,8 +102,10 @@ def solver(model_name):
         ### ======== TODO : START ========= ###
         # Do the forward pass, compute the loss, do the backward pass, and update the weights with the optimizer.
         
-        
-        
+        optimizer.zero_grad()
+        train_loss = loss(model(context), target.squeeze(1))
+        train_loss.backward()
+        optimizer.step()
         
         ### ======== TODO : END ========= ###
 
@@ -121,8 +123,17 @@ def solver(model_name):
             # Hint:
             # - Remember to manually break out of the evaluation loop as the dataloader wraps around the dataset.
             
+            eval_loss = 0
+            eval_steps = 0
+            with torch.no_grad():
+                for j, (eval_context, eval_target) in enumerate(eval_dataloader):
+                    eval_loss += loss(model(eval_context), eval_target.squeeze(1)).item()
+                    eval_steps += 1
+
+                    if eval_steps >= len(eval_dataloader):
+                        break
             
-            
+            eval_loss /= eval_steps
             
             ### ======== TODO : END ========= ###
             
@@ -130,7 +141,7 @@ def solver(model_name):
                 f"Iteration {i}, Train Loss: {train_loss}",
                 f"Eval Loss: {eval_loss}",
             )
-
+            
             if config.to_log:
                 wandb.log(
                     {

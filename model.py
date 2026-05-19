@@ -8,6 +8,9 @@ from einops import einsum, reduce, rearrange
 
 from config import BigramConfig, MiniGPTConfig
 
+# New import
+from torch.distributions import Categorical
+
 class BigramLanguageModel(nn.Module):
     """
     Class definition for a simple bigram language model.
@@ -62,7 +65,7 @@ class BigramLanguageModel(nn.Module):
         x = self.linear(x)
         x = self.dropout(x)
         
-        return x
+        return x.squeeze(1)
 
         # ========= TODO : END ========= #
 
@@ -104,17 +107,16 @@ class BigramLanguageModel(nn.Module):
 
         # raise NotImplementedError
         
-        generated_tokens = torch.zeros(max_new_tokens, 1, dtype=torch.long)
-        
-        last_token = context[-1,:]
-        assert last_token.shape == (1, 1)
+        generated_tokens = context
         
         for i in range(0, max_new_tokens):
+            last_token = generated_tokens[:, -1:]
             next_token_logits = self.forward(last_token)
-            next_token_probs = torch.softmax(next_token_logits, dim=1)
+            next_token_probs = torch.softmax(next_token_logits, dim=-1)
             dist = Categorical(next_token_probs)
-            last_token = dist.sample()
-            generated_tokens[i, 0] = last_token.item()
+            next_token = dist.sample()
+            next_token = next_token.unsqueeze(-1)
+            generated_tokens = torch.cat((generated_tokens, next_token), dim=1)
         
         return generated_tokens
         
